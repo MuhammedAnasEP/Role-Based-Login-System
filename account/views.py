@@ -33,11 +33,8 @@ def loginview(request):
             username = form.cleaned_data.get('username') 
             password = form.cleaned_data.get('password')
             user = authenticate(username = username, password = password)
-            print(user)
             if user is not None and user.is_admin:
-                print("111111")
                 login(request, user)
-                print("2222222")
                 return redirect('adminpage')
             elif user is not None and user.is_employe:
                 login(request, user)
