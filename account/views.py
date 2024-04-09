@@ -24,7 +24,7 @@ def register(request):
         form = SignupForm()
     return render(request, 'register.html', {'form':form, 'msg':msg})
 
-def login(request):
+def loginview(request):
     form = LoginForm(request.POST or None)
     msg = None
 
@@ -33,14 +33,29 @@ def login(request):
             username = form.cleaned_data.get('username') 
             password = form.cleaned_data.get('password')
             user = authenticate(username = username, password = password)
-            if user is not None:
+            print(user)
+            if user is not None and user.is_admin:
+                print("111111")
                 login(request, user)
-                return redirect('home')
+                print("2222222")
+                return redirect('adminpage')
+            elif user is not None and user.is_employe:
+                login(request, user)
+                return redirect('employepage')
+            elif user is not None and user.is_customer:
+                login(request, user)
+                return redirect('customerpage')
             else:
                 msg = 'Invalid Credentials'
         else:
             msg = "Error Validations Form"
     return render(request, 'login.html', {'form':form, 'msg':msg})
 
-def home(request):
-    return render(request, 'homepage.html')
+def admin(request):
+    return render(request, 'admin.html')
+
+def customer(request):
+    return render(request, 'customer.html')
+
+def employee(request):
+    return render(request, 'employee.html')
